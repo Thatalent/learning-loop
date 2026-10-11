@@ -1,0 +1,11 @@
+{
+  "name": "learning-loop",
+  "owner": { "name": "Jonathan Hudson" },
+  "plugins": [
+    {
+      "name": "learning-loop",
+      "source": "./",
+      "description": "Learn while you work with AI: Bloom's-based goals, active-learning micro-moments, comprehension checks, and knowledge handoff docs."
+    }
+  ]
+}

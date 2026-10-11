@@ -1,0 +1,8 @@
+{
+  "name": "learning-loop",
+  "version": "0.1.0",
+  "description": "Skills that turn everyday AI-assisted work into deliberate learning: Bloom's taxonomy for goals, the learning ladder for activities, built-in comprehension checks, and knowledge handoff docs.",
+  "author": { "name": "Jonathan Hudson" },
+  "license": "MIT",
+  "keywords": ["learning", "education", "blooms-taxonomy", "documentation", "onboarding", "knowledge-sharing"]
+}

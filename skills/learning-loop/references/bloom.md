@@ -1,6 +1,6 @@
 # Bloom's Taxonomy for Competency Goals
 
-Use these levels to set the target ("what should they be able to do?") and to decide what counts as evidence. Levels build on each other, but people don't have to climb in strict order. A quick Apply exercise often builds Understanding faster than more explanation.
+Use these levels to find a person's competency gap and to decide what counts as evidence. Treat them as a pyramid: each level rests on the ones below, so secure the foundation before building on it. In practice levels overlap (a quick Apply exercise can build Understanding), but when setting goals, close the lowest gap first.
 
 | Level | The person can... | Useful verbs | Evidence that they've got it |
 |---|---|---|---|
@@ -11,19 +11,37 @@ Use these levels to set the target ("what should they be able to do?") and to de
 | **Evaluate** | Judge quality and make tradeoffs | review, critique, justify, choose | Reviews someone else's solution and spots real issues; defends a design choice |
 | **Create** | Produce something new that others can use | design, write, build, teach | Writes the runbook, design, or explainer that someone else successfully learns from |
 
-## Choosing a target
+## Finding the gap
 
-- **Triage debrief:** usually Analyze ("could you diagnose the next one?").
-- **Building a feature in an unfamiliar area:** Apply for the parts they'll maintain, Understand for the rest.
-- **Onboarding to a system:** Understand for the big picture, Apply for the daily tasks.
-- **Owning a system or being on call for it:** Analyze minimum; Evaluate for design decisions.
-- **Writing team documentation:** Create, which requires the levels below it. Gaps show up quickly when someone tries to write it.
+A goal is a gap: **the level the role needs minus the level the person can prove.**
 
-Don't aim everything at Create. Pick the level the person actually needs for their role, and say it out loud so they can push back ("I'm aiming for you to be able to diagnose this kind of thing yourself. Is that the right goal, or do you just need the gist?").
+**What the role needs**
+- Uses the system day to day: Apply.
+- On call for it, or debugging it: Analyze.
+- Owns its design or reviews changes to it: Evaluate.
+- Teaches it, documents it, or onboards others: Create.
 
-## Gauging the current level cheaply
+**What they can prove: probe upward until it breaks.** Ask one problem per level, starting at the base, adapted to the actual system. Stop at the first level they can't do without help or looking things up; that is their edge.
 
+| Level | Probe (adapt to the system) |
+|---|---|
+| Remember | "Without looking: what does it take in, what does it produce, who owns it?" |
+| Understand | "In two or three sentences, what happens from input to output, and why is it built that way?" |
+| Apply | "What exact check shows whether it's healthy right now? Run it." |
+| Analyze | "Its main number dropped by half overnight. Three possible causes, and what do you check first?" |
+| Evaluate | "Here's a proposed fix. What would you need to know before approving it, and what could it break?" |
+| Create | "Outline the first steps of a runbook a new teammate could follow without asking you." |
+
+Judge answers on whether they demonstrate the level (specific, causal where needed, actionable), not on polish. "Shaky" (partly, or needed to look) counts as the edge.
+
+**The first goal is the first level they couldn't prove**, never a level above it, even if the role needs more. If they're solid through everything the role needs, there's no gap for this system: say so, and offer Create (writing it up for the next person) rather than teaching below their level.
+
+**Then say it out loud:** "You're solid through Understand, and on call this needs Analyze. So the first goal is Apply: you run the health check yourself." Let the person push back on the goal.
+
+## Gauging cheaply during normal work
+
+You won't run the full climb on every task. Lightweight signals:
 - Listen to vocabulary. Correct use of terms suggests Remember+; describing mechanisms suggests Understand+.
 - Ask for a prediction. Accurate predictions suggest Understand or Analyze.
 - Ask what they've already tried. Good hypotheses suggest Analyze.
-- When unsure, assume one level lower than it looks and adjust quickly. Over-explaining slightly is cheaper than losing them.
+- When unsure, probe one level up with a single question rather than assuming.

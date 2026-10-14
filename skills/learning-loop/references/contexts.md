@@ -28,6 +28,14 @@ If accepted, run a debrief:
 - Before finishing: "In one or two sentences, how would you describe this change in the PR?" Their answer is the Understand check. Gently correct anything missing.
 - If the change touches something non-obvious about the system, offer `knowledge-handoff` for a short note in the repo docs or design log.
 
+### Explaining a change
+
+When the person asks you to explain a change, diff or PR (often one you just made), a plain walkthrough is the passive read rung. Keep the walkthrough, then add:
+
+- **Name the pattern** behind each fix in plain English (for example: "newest label wins, not newest write", or "replace where you should merge").
+- **One predict-first** on an edge case the change handles or deliberately does not handle. Pick a case whose answer depends on understanding the mechanism, not on remembering the diff.
+- **Explain it back:** ask for the one- or two-sentence PR description in their words, and fill in what's missing.
+
 ## Document
 
 **Default dial:** Learn alongside, leaning toward Teach me. Documentation is the top of the ladder.
@@ -43,7 +51,7 @@ If accepted, run a debrief:
 2. Big-picture diagram first.
 3. Go hands-on early: have them run a read-only query, open the key file, or trace one request end to end.
 4. Interleave short retrieval checks.
-5. End with them explaining the system back in a few sentences, then offer a doc.
+5. End with them explaining the system back in a few sentences, then offer a doc, or a lesson deck if others will onboard to the same system (`knowledge-handoff` step 1a).
 
 ## Pure Q&A ("how does X work?")
 

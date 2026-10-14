@@ -10,6 +10,7 @@ Use whatever tools are available in the current environment. These are the categ
 | **Practice** | The person runs it themselves in their terminal or tool; you review | A realistic scenario they reason through in chat |
 | **Retrieval practice** | An interactive quiz or flashcard tool | Ask one question at a time in chat; reveal the answer only after they respond |
 | **Teaching others** | A collaborative docs tool or wiki connector (so the result is shared) | A markdown file in the repo's docs folder; a doc-ready block they can paste |
+| **Teaching many people** (a repeatable lesson) | A self-paced HTML lesson deck from the `frontend-slides` skill, with question and reveal slides (see `knowledge-handoff` step 1a) | An explainer with a "Check yourself" section |
 | **Spacing** | A reminder, scheduled message, or calendar tool if available and the person agrees | Suggest when to revisit ("try the variant question again in a couple of days") |
 
 ## Rules of thumb

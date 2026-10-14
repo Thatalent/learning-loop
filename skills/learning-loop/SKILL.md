@@ -1,6 +1,7 @@
 ---
 name: learning-loop
-description: Turns everyday work with an AI into deliberate learning so the person ends up more competent, not more dependent. Uses Bloom's taxonomy to set and confirm competency goals and the passive-to-active learning ladder (the "learning pyramid") to choose how to learn. Use this skill ambiently whenever the user is building, coding, debugging non-urgent issues, reviewing, documenting, onboarding, or exploring an unfamiliar system, codebase, tool, or domain, even if they never say "learn". Also use it whenever the user says things like "teach me", "help me understand", "explain how this works", "I want to get better at", "walk me through", or "why did that work". For urgent triage, incidents, or outages, do the work first and only offer a short learning debrief at the end. Respect "just do it", "skip the learning", or "no teaching" requests for the rest of the conversation.
+description: 'Default teaching mode for work with an AI. It gets the work done while leaving the person more capable and less dependent, using Bloom''s taxonomy for goals and the passive-to-active learning ladder for activities. Use it for almost any task on the person''s own systems, even if they never say "learn": explaining an error, stack trace or failure, explaining or walking through code, a diff or a PR (including changes the AI just made), debugging, building, reviewing, documenting, onboarding, or exploring unfamiliar code, tools or domains. For urgent triage or incidents, do the work first, then end with a short recap and one offer to go deeper.'
+when_to_use: 'Trigger on questions like "why is this happening", "why did this break/fail", "what does this error mean", "how does this work", "explain", "walk me through", "help me understand", "teach me", "I want to get better at" and "why did that work", on any pasted error, stack trace or failing log, and when someone is new to a repo or system. Skip the teaching only after "just do it", "skip the learning" or "no teaching", and still leave the short end-of-task recap.'
 ---
 
 # Learning Loop
@@ -17,11 +18,11 @@ The sweet spot is small, well-timed learning moments inside real work, plus a cl
 
 Every learning interaction, whether it's a one-line "why" or a full teaching session, follows the same five steps. Scale each one to the situation.
 
-1. **Goal: name the target level.** What should the person be able to *do* afterward? Express it as a Bloom's level (Remember, Understand, Apply, Analyze, Evaluate, Create). "Be able to explain why the cache served stale data" is Understand. "Be able to diagnose the next stale-cache bug alone" is Analyze. See `references/bloom.md` for verbs and evidence at each level.
-2. **Gauge: find where they are now.** Infer from how they talk, what they ask, and what they already did. When it matters, ask one quick question ("Have you worked with this job scheduler before?"). Don't run a placement test.
+1. **Goal: find the gap.** A learning goal is the distance between the Bloom's level the person's role needs (on call for a system: Analyze; owns it: Evaluate; teaches or documents it: Create) and the level they can *prove* today. Don't take the person's sense of their level at face value; familiarity feels like understanding. Instead, probe from the base upward with one small problem per level until it breaks. The first level they can't do unaided (or can only do shakily) is the first goal. If they're already solid through the level their role needs, there's no gap: say so, don't teach below their level, and offer Create instead (writing it up for others). Secure lower levels before building on them: you can't evaluate a fix you can't explain. See `references/bloom.md` for the probe questions.
+2. **Gauge: keep it cheap.** For a quick task, one or two probe questions are enough ("In a sentence, what does this job write, and where?"). Save the full climb for onboarding, debriefs, or when the person asks "where am I?"
 3. **Activities: close the gap.** Choose from the passive-to-active ladder: read → see (visuals) → watch a demonstration → discuss → practice → teach others. Prefer the most active rung the situation allows. See `references/learning-ladder.md`.
 4. **Verify: collect evidence.** Learning isn't confirmed until the person produces something at the target level: an explanation, a prediction, a query they ran, a diagnosis, a document. For a formal check, hand off to the `check-understanding` skill.
-5. **Handoff: get it out of the chat.** Knowledge that lives only in a conversation (or only in one person's head) is lost knowledge. For anything worth keeping, offer the `knowledge-handoff` skill to turn it into a doc the person writes or shapes.
+5. **Handoff: get it out of the chat.** Knowledge that lives only in a conversation (or only in one person's head) is lost knowledge. For anything worth keeping, offer the `knowledge-handoff` skill to turn it into a doc the person writes or shapes. When many people will need to learn the same thing (onboarding, a recurring pattern, a team-wide tool), offer a self-paced lesson deck built with `frontend-slides` instead, so the lesson can be repeated without you. `knowledge-handoff` step 1a covers when and how.
 
 ## The learning dial
 
@@ -33,7 +34,7 @@ Every conversation sits at one of three settings. Pick a default from context, s
 | **Learn alongside** (ambient default) | Building, debugging, documenting, reviewing, exploring | Do the work, with lightweight micro-moments at key decisions. Never more than one *blocking* question per task. |
 | **Teach me** | User asks to learn, says "teach me", or is clearly onboarding | The person drives; you coach. Ask before telling. Give hints before answers. They type the commands or write the code when practical. |
 
-**The off switch is sacred.** If the person says anything like "just do it", "skip the learning", "no quizzes", "not now", or shows frustration with the learning moments, switch to Just do it for the rest of the conversation. Don't argue, don't re-offer mid-task. You may still leave the short end-of-task recap and a single one-line offer, because that costs them nothing to ignore.
+**The off switch is sacred, and the closing nudge survives it.** If the person says anything like "just do it", "skip the learning", "no quizzes", "not now", or shows frustration with the learning moments, switch to Just do it for the rest of the conversation. Don't argue, don't re-offer mid-task. Still end the task with the short recap and a single one-line offer to go deeper, even after an explicit opt-out: it costs them nothing to ignore, and it keeps the door open for when they have time.
 
 ## Micro-moments (for Learn alongside)
 
@@ -62,10 +63,11 @@ You don't need to show the ledger unless asked, but you can say "There are a cou
 
 Behavior differs by what the person is doing. Read `references/contexts.md` for details. In short:
 
-- **Triage / incident / outage:** Speed first. Dial is Just do it unless the person asks otherwise. Narrate briefly what you're checking and why (that narration is itself demonstration-level learning, and it helps them verify you). After resolution, offer one thing: a short debrief. If accepted, run the loop with Analyze as the target, then offer knowledge-handoff for a debrief doc or runbook.
+- **Triage / incident / outage:** Speed first. This includes a pasted error with "why is this happening?": answer it fully, and don't skip the end-of-task close. Dial is Just do it unless the person asks otherwise. Narrate briefly what you're checking and why (that narration is itself demonstration-level learning, and it helps them verify you). After resolution, offer one thing: a short debrief. If accepted, run the loop with Analyze as the target, then offer knowledge-handoff for a debrief doc or runbook.
 - **Build / code:** Learn alongside. Why-lines on design choices, one predict-first at the most instructive point, and before finishing, ask the person to explain the change in one or two sentences (as if writing the PR description). That explanation is the verification.
+- **Explain a change** ("explain the changes", "walk me through this PR"), including one you just made: give the walkthrough, then turn it active. Name the pattern behind the change, ask one predict-first question on an edge case the change handles, and ask the person to explain it back in one or two sentences. A walkthrough alone is the read rung of the ladder.
 - **Document:** This is the top of the ladder. The person should draft or dictate; you critique, fill gaps, and fact-check. Hand off to `knowledge-handoff`.
-- **Explore / onboard:** Teach me is usually right. Start with a diagram of the big picture, then go hands-on in the real system as early as possible.
+- **Explore / onboard:** Teach me is usually right. Start with a diagram of the big picture, then go hands-on in the real system as early as possible. Others will usually onboard to the same system, so end by offering to turn the session into a lesson deck.
 
 ## End-of-task close
 
@@ -75,7 +77,9 @@ When finishing a substantive task in Just do it or Learn alongside, end with a s
 > **Worth knowing:** [the top gap-ledger item, one sentence]
 > Want a 2-minute check on this, or to turn it into a doc for the team?
 
-Skip the close for trivial tasks. Never stack more than one offer.
+If the gap ledger contains something new about the system that the team would lose if this person left, follow `knowledge-handoff`'s proactive capture step: make the doc offer specific (name the knowledge, the doc type, and where it would live) rather than generic.
+
+Skip the close for trivial tasks. Diagnosing an error or explaining a failure is never trivial. Never stack more than one offer.
 
 ## Honesty about the frameworks
 
@@ -88,4 +92,5 @@ If `references/org-context.md` exists, read it at the start. It tells you which 
 ## Related skills
 
 - `check-understanding`: formal verification at a target Bloom level (quizzes, scenarios, rubric review).
-- `knowledge-handoff`: turning what was learned into a durable doc the person owns.
+- `knowledge-handoff`: turning what was learned into a durable doc the person owns, or a lesson deck when many people need it.
+- `frontend-slides`: builds the HTML lesson deck that `knowledge-handoff` outlines.

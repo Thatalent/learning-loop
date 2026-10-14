@@ -1,0 +1,19 @@
+{
+  "description": "Remind Claude to use the learning-loop skill: a standing instruction at session start, and a short nudge on prompts that ask why or how something works.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/learning-loop-nudge.sh\" session", "timeout": 5 }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/learning-loop-nudge.sh\" prompt", "timeout": 5 }
+        ]
+      }
+    ]
+  }
+}

@@ -21,14 +21,23 @@ A note on honesty: the learning pyramid is usually shown with retention percenta
 |---|---|---|
 | `learning-loop` | The core engine: sets a Bloom goal, picks activities, adds micro-moments (why-lines, predict-first, diagrams), and tracks a "gap ledger" of things the AI knows that you don't yet | **Ambient** during building, documenting, and exploring. **Opt-in** during triage, with a debrief offer at the end |
 | `check-understanding` | Quizzes, flashcards, scenario questions, and rubric reviews, matched to the Bloom level | "Quiz me", "check my understanding", or after a session |
-| `knowledge-handoff` | Turns what you learned into an explainer, runbook, debrief, or decision record that **you** shape, then publishes it | "Document this", "write the postmortem", or end-of-task offers |
+| `knowledge-handoff` | Turns what you learned into an explainer, runbook, debrief, or decision record that **you** shape, then publishes it. When many people need to learn the same thing, it builds a self-paced lesson deck instead (with the optional [`frontend-slides`](https://github.com/zarazhangrui/frontend-slides) skill) so the lesson repeats without a teacher | "Document this", "write the postmortem", or end-of-task offers |
 
 ### The learning dial
 - **Just do it:** the work, plus a 2-line "what happened and why" at the end. Default for urgent triage.
 - **Learn alongside:** the work, plus lightweight learning moments. Default for everything else.
 - **Teach me:** you drive, Claude coaches.
 
-Say "just do it" or "skip the learning" at any time, and it stays off for the rest of the conversation.
+Say "just do it" or "skip the learning" at any time, and the teaching stays off for the rest of the session, including after context compaction. Say "turn the learning back on" to resume. Opting out stops the teaching, not the nudge: Claude still ends each substantive task with a one-line recap and a single one-line offer to go deeper.
+
+### Why it triggers so often (Claude Code plugin only)
+
+Claude picks a skill by matching your message against its description, which isn't enough for a skill meant to run ambiently. The Claude Code plugin therefore also ships two hooks (`hooks/hooks.json`):
+
+- **SessionStart** adds a standing instruction to use `learning-loop` by default. It works like a line in `~/.claude/CLAUDE.md`, but nobody has to edit that file, and it goes away when you disable the plugin.
+- **UserPromptSubmit** adds a one-line nudge when a prompt asks why or how something works, asks to explain or walk through code, a diff or a PR, or reports an error, failure, crash or stack trace, plus a wrap-up nudge (toward `knowledge-handoff`) on "that fixed it", "LGTM", "merged" and similar. Keyword checks run on the prompt text only; the script uses `jq` or `python3` when installed and falls back to a plain-text check otherwise.
+
+To turn both hooks off and keep the skills, set `LEARNING_LOOP_NUDGES=off` (for example in the `env` block of `~/.claude/settings.json`). The hooks need `bash`, so they don't run on Windows without WSL or Git Bash. Skills uploaded to claude.ai don't get the hooks.
 
 ## Install
 

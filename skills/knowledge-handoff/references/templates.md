@@ -62,6 +62,20 @@ Keep every doc skimmable: a summary on top, short sections, diagrams where they 
 ## Who to ask
 ```
 
+## Lesson deck outline
+Hand this to `frontend-slides` as a reading deck. "Q/A" means a question slide followed by its answer slide.
+```
+1. Title: <topic>, for <audience>, ~10 min
+2. Goal: "After this you can <Bloom verb + task>"
+3. Big picture: one diagram of the parts involved (normal vs. failure for a bug)
+4. Q/A Predict first: "What do you think happens when ...?"
+5. The real case: what happened, shown with the actual error, log or query (sanitized)
+6. Name the pattern: the general rule in one sentence, and where else it shows up
+7. Q/A Practice: a new scenario with the same pattern, different details
+8-10. Q/A Check yourself: 3 questions at the target level (from check-understanding)
+11. Where next: runbook or explainer links, owner or channel to ask, date and author
+```
+
 ## Sanitization checklist for public sharing
 - [ ] No customer, client, or partner names (including in ticket titles and screenshots)
 - [ ] No credentials, tokens, account IDs, hostnames, bucket or table names, or internal URLs

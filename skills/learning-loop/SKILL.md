@@ -1,7 +1,7 @@
 ---
 name: learning-loop
-description: 'Default teaching mode for work with an AI. It gets the work done while leaving the person more capable and less dependent, using Bloom''s taxonomy for goals and the passive-to-active learning ladder for activities. Use it for almost any task on the person''s own systems, even if they never say "learn": explaining an error, stack trace or failure, explaining or walking through code, a diff or a PR (including changes the AI just made), debugging, building, reviewing, documenting, onboarding, or exploring unfamiliar code, tools or domains. For urgent triage or incidents, do the work first, then end with a short recap and one offer to go deeper.'
-when_to_use: 'Trigger on questions like "why is this happening", "why did this break/fail", "what does this error mean", "how does this work", "explain", "walk me through", "help me understand", "teach me", "I want to get better at" and "why did that work", on any pasted error, stack trace or failing log, and when someone is new to a repo or system. Skip the teaching only after "just do it", "skip the learning" or "no teaching", and still leave the short end-of-task recap.'
+description: 'Default teaching mode for work with an AI. It gets the work done while leaving the person more capable and less dependent, using Bloom''s taxonomy for goals and the passive-to-active learning ladder for activities. Use it for almost any task on the person''s own systems, even if they never say "learn": explaining an error, stack trace or failure, explaining or walking through code, a diff or a PR (including changes the AI just made), debugging, building, reviewing, documenting, onboarding, or exploring unfamiliar code, tools or domains. Also use it when finishing implementation work ("complete this ticket", "implement X", "fix Y") whose change moves a business rule, the shape of data, or a contract between services: the person must understand the downstream effect before the work ships. For urgent triage or incidents, do the work first, then end with a short recap and one offer to go deeper.'
+when_to_use: 'Trigger on questions like "why is this happening", "why did this break/fail", "what does this error mean", "how does this work", "explain", "walk me through", "help me understand", "teach me", "I want to get better at" and "why did that work", on any pasted error, stack trace or failing log, when someone is new to a repo or system, and at the end of any implementation task that changed a business rule, data or a contract (see "Completion check"). Skip the teaching only after "just do it", "skip the learning" or "no teaching", and still leave the short end-of-task recap.'
 ---
 
 # Learning Loop
@@ -68,6 +68,28 @@ Behavior differs by what the person is doing. Read `references/contexts.md` for 
 - **Explain a change** ("explain the changes", "walk me through this PR"), including one you just made: give the walkthrough, then turn it active. Name the pattern behind the change, ask one predict-first question on an edge case the change handles, and ask the person to explain it back in one or two sentences. A walkthrough alone is the read rung of the ladder.
 - **Document:** This is the top of the ladder. The person should draft or dictate; you critique, fill gaps, and fact-check. Hand off to `knowledge-handoff`.
 - **Explore / onboard:** Teach me is usually right. Start with a diagram of the big picture, then go hands-on in the real system as early as possible. Others will usually onboard to the same system, so end by offering to turn the session into a lesson deck.
+
+## Completion check
+
+Before you report implementation work as done, judge the change itself, not the wording of the request. "Complete this ticket" has no learning words in it, but a ticket that changes how much data a job reads is exactly where the person most needs to understand the result.
+
+Look at the full diff of the work (commits, staged, unstaged, new files) and sort what changed:
+
+| Signal | Examples |
+|---|---|
+| **Business rule** | A window, threshold, limit, default, schedule, cutoff, eligibility rule or feature switch, in config or as a named constant |
+| **Data impact** | What a query filters, joins, groups or selects; the columns, rows, file name or location a job writes; a schema or migration |
+| **Contract** | A field one side sends and another reads: API request/response, event or job payload, message schema, workflow step input |
+
+Then pick the depth:
+
+- **No signal, small change:** the normal end-of-task close.
+- **One kind of signal, or a large change:** run the loop at **Understand**. Ask one predict-first question about what the change does to its nearest consumer, then close.
+- **A business rule plus a data or contract change (or data plus contract):** run the loop at **Analyze**. Trace the chain from the change to the last consumer that people look at (a dashboard, an audience size, a report), and ask one predict-first question about it, such as "what will this number show on day 1 vs day 30?" Then hand off to `knowledge-handoff` with one specific offer: a change explainer built on a before/after diagram of that data flow, with the deploy order and what to watch after release.
+
+Name the real consumers. Search for the readers of the changed key, column, path or field before you teach or draw; a generic chain ("downstream jobs") teaches nothing. If the repo has `.claude/learning-judge.json`, its rules already list them.
+
+In Claude Code, the plugin's Stop hook (`scripts/learning_judge.py`) runs this same check on the diff and will remind you if you skip it. Do not wait for the reminder. The check applies in every client, hook or no hook.
 
 ## End-of-task close
 

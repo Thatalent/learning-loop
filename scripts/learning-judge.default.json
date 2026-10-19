@@ -1,0 +1,259 @@
+{
+  "_doc": "Generic rules the learning judge uses in a repo that has no .claude/learning-judge.json. They find the kind of change (a business rule, a data change, a contract change) but cannot know the repo's real consumers, so every rule is marked generic and the hook asks Claude to name the real consumers before it teaches or draws. Copy this file to <repo>/.claude/learning-judge.json and replace the downstream chains with real ones (set include_default_rules to keep these rules too).",
+  "base_refs": [
+    "origin/main",
+    "origin/master",
+    "main",
+    "master",
+    "origin/develop",
+    "develop"
+  ],
+  "test_paths": [
+    "**/tests/**",
+    "**/test/**",
+    "**/__tests__/**",
+    "src/test/**",
+    "**/test_*.py",
+    "**/*_test.py",
+    "**/*_test.go",
+    "**/*Test.java",
+    "**/*Tests.cs",
+    "**/*.test.*",
+    "**/*.spec.*"
+  ],
+  "ignore_paths": [
+    ".claude/**",
+    "**/*.md",
+    "**/*.lock",
+    "**/package-lock.json",
+    "**/yarn.lock",
+    "**/pnpm-lock.yaml",
+    "**/go.sum",
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.venv/**",
+    "**/__pycache__/**",
+    "docs/**"
+  ],
+  "size_thresholds": {
+    "medium": 150,
+    "large": 600
+  },
+  "max_evidence_per_rule": 3,
+  "rules": [
+    {
+      "id": "config-business-values",
+      "kind": "business_rule",
+      "generic": true,
+      "title": "Config values that encode business rules",
+      "paths": [
+        "**/*.yml",
+        "**/*.yaml",
+        "**/*.json",
+        "**/*.toml",
+        "**/*.ini",
+        "**/*.properties",
+        "**/*.conf",
+        "**/*.cfg",
+        "**/.env*",
+        "**/config/**",
+        "**/settings*"
+      ],
+      "exclude_paths": [
+        "**/tsconfig*.json",
+        "**/package.json",
+        "**/.eslintrc*",
+        "**/.prettierrc*",
+        ".github/**",
+        "**/*.schema.json"
+      ],
+      "patterns": [
+        "(?i)lookback|window|threshold|cutoff|retention|ttl",
+        "(?i)\\b(min|max)[_-]?\\w*|limit|quota|rate",
+        "(?i)days|hours|minutes|percent|ratio|weight|score",
+        "(?i)default|enabled|feature|flag|schedule|cron"
+      ],
+      "why": "Config values often are the business rules: windows, thresholds, limits, schedules, feature switches. A changed value changes behavior for every run or request that reads it.",
+      "learn": "state the old and new value, what reads it, and what a user or downstream job sees differently.",
+      "downstream": [
+        "code and jobs that read this setting",
+        "their outputs (API responses, files, tables)",
+        "users, reports and dashboards"
+      ]
+    },
+    {
+      "id": "code-business-constants",
+      "kind": "business_rule",
+      "generic": true,
+      "title": "Business constants and defaults in code",
+      "paths": [
+        "**"
+      ],
+      "patterns": [
+        "\\b[A-Z][A-Z0-9_]*(MIN|MAX|LIMIT|THRESHOLD|DEFAULT|DAYS|HOURS|WINDOW|LOOKBACK|TIMEOUT|TTL|RETENTION|CUTOFF|RATE|PERCENT|RATIO)[A-Z0-9_]*\\s*[:=]",
+        "(?i)\\b(default|fallback)[_ ]?(value|days|window|limit|threshold)\\b"
+      ],
+      "why": "A named limit or default in code is a business rule. Everything that relies on the old value changes with it.",
+      "learn": "say which callers rely on the old value and what they see now.",
+      "downstream": [
+        "functions and services that use this value",
+        "their outputs",
+        "users, reports and dashboards"
+      ]
+    },
+    {
+      "id": "query-semantics",
+      "kind": "data_impact",
+      "generic": true,
+      "title": "Query semantics (filters, joins, grouping, columns)",
+      "paths": [
+        "**"
+      ],
+      "patterns": [
+        "\\b(SELECT|INSERT INTO|UPDATE|DELETE FROM|MERGE INTO|UPSERT)\\b",
+        "\\b(WHERE|GROUP BY|HAVING|JOIN|PARTITION BY|ORDER BY|DISTINCT)\\b",
+        "\\bAS\\s+[A-Za-z_]\\w*\\s*[,\"']",
+        "(?i)\\.(filter|where|groupBy|group_by|join|agg|aggregate)\\("
+      ],
+      "why": "Changes which rows a query returns or writes, so every number built from it moves.",
+      "learn": "say which screen, report or table shows the changed number and how it moves.",
+      "downstream": [
+        "the query result",
+        "tables, files or API responses built from it",
+        "users, reports and dashboards"
+      ]
+    },
+    {
+      "id": "schema-and-migrations",
+      "kind": "data_impact",
+      "generic": true,
+      "title": "Schema changes and migrations",
+      "paths": [
+        "**/migrations/**",
+        "**/migrate/**",
+        "**/db/**",
+        "**/flyway/**",
+        "**/liquibase/**",
+        "**/*.sql",
+        "**/*.avsc",
+        "**/*.proto",
+        "**/schema*/**"
+      ],
+      "patterns": [
+        "(?i)\\b(ALTER|CREATE|DROP|RENAME)\\s+(TABLE|COLUMN|INDEX|VIEW)\\b",
+        "(?i)\\bADD\\s+COLUMN\\b",
+        "(?i)\\b(NOT NULL|DEFAULT|PRIMARY KEY|FOREIGN KEY|UNIQUE)\\b",
+        "^\\s*(required|optional|repeated)\\s+\\w+",
+        "\"(type|name|default)\"\\s*:"
+      ],
+      "why": "Changes the shape of stored data. Readers that expect the old shape can break or silently read nulls.",
+      "learn": "name each reader of the changed table or schema and what it does during and after the rollout.",
+      "downstream": [
+        "the stored table or schema",
+        "services and jobs that read it",
+        "reports and exports built on it"
+      ]
+    },
+    {
+      "id": "data-writes",
+      "kind": "data_impact",
+      "generic": true,
+      "title": "Data written to files, buckets or tables",
+      "paths": [
+        "**"
+      ],
+      "patterns": [
+        "(?i)\\b(put_object|PutObject|upload_file|upload_fileobj|copy_object|write_bytes|write_text)\\b",
+        "(?i)to_parquet|to_csv|write\\.(parquet|csv|json|format)|saveAsTable|insertInto|\\.save\\(",
+        "(?i)\\b(output_?(path|file|prefix|key)|key_?prefix|dest(ination)?_?(path|key)|target_?(path|table))\\b\\s*[:=]"
+      ],
+      "why": "Changes what lands where other jobs read it: the file contents, its name, or its location.",
+      "learn": "name the job that reads this output and what it does with the change.",
+      "downstream": [
+        "the written file, object or table",
+        "jobs that read it",
+        "their outputs and the people who use them"
+      ]
+    },
+    {
+      "id": "api-contract",
+      "kind": "contract",
+      "generic": true,
+      "title": "API and message contracts",
+      "paths": [
+        "**/dto/**",
+        "**/dtos/**",
+        "**/api/**",
+        "**/web/**",
+        "**/routes/**",
+        "**/controllers/**",
+        "**/handlers/**",
+        "**/schemas/**",
+        "**/models/**",
+        "**/*.proto",
+        "**/*.graphql",
+        "**/openapi*",
+        "**/swagger*"
+      ],
+      "patterns": [
+        "@(Get|Post|Put|Delete|Patch|Request)Mapping|@Json\\w+|@(Min|Max|NotNull|NotBlank|Valid)\\b",
+        "^\\s*private\\s+[\\w<>, ?]+\\s+\\w+\\s*[;=]",
+        "(?i)\\b(router|app)\\.(get|post|put|delete|patch|route)\\(",
+        "^\\s*\\w+\\??\\s*:\\s*[\\w\\[\\]<>|. ]+[;,]?\\s*$",
+        "^\\s*(required|optional|repeated)\\s+\\w+"
+      ],
+      "why": "A field one side sends and the other reads. Clients and servers deploy separately, so both must accept the old shape during the rollout.",
+      "learn": "name the clients of the changed field and the deploy order that keeps a mixed rollout safe.",
+      "downstream": [
+        "this service's API or message",
+        "its clients and consumers"
+      ]
+    },
+    {
+      "id": "event-payload-contract",
+      "kind": "contract",
+      "generic": true,
+      "title": "Event and job payload fields",
+      "paths": [
+        "**"
+      ],
+      "patterns": [
+        "event\\[|event\\.get\\(",
+        "payload\\[|payload\\.get\\(|message\\[",
+        "\"[A-Za-z]+\\.\\$\"\\s*:"
+      ],
+      "why": "A field passed between functions, queues or workflow steps. The producer and consumer may deploy separately.",
+      "learn": "name the producer and consumer of the changed field and what each does with the old shape.",
+      "downstream": [
+        "the producer of the event or payload",
+        "its consumers"
+      ]
+    },
+    {
+      "id": "infra-runtime",
+      "kind": "operational",
+      "generic": true,
+      "title": "Infrastructure, build or runtime",
+      "paths": [
+        "**/*.tf",
+        "**/*.hcl",
+        "**/Dockerfile*",
+        "**/docker-compose*",
+        ".github/**",
+        "**/*.gradle",
+        "**/pom.xml",
+        "**/Makefile",
+        "**/k8s/**",
+        "**/helm/**",
+        "**/charts/**"
+      ],
+      "why": "Changes how or where the code builds and runs. Behavior can change with no code change.",
+      "learn": "say how the change was verified and what to watch after deploy.",
+      "downstream": [
+        "build and deploy pipeline",
+        "the running service or job"
+      ]
+    }
+  ]
+}

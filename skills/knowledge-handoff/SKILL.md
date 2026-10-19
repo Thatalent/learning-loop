@@ -83,6 +83,7 @@ Offer these; let the person pick:
 - Check every claim against what actually happened in the conversation or in the real system. Don't fill gaps with plausible guesses.
 - Anything the AI inferred but nobody verified gets marked: `> ⚠️ Unverified: ...`. The person can confirm and remove the marker.
 - Include the diagram from the session if there was one. Visuals make docs far more useful to the next reader.
+- For a change that moved a business rule together with data or a contract (learning-loop's Completion check), the doc is a change explainer: a before/after diagram of the data flow from the change to the last consumer people look at, mark on each edge what changed (rule, window, row shape, field), then the deploy order and what to watch after release. A mermaid flowchart works in most doc tools; the Stop hook supplies a skeleton to start from.
 
 ## 4. Protect sensitive information
 

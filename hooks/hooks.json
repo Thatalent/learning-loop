@@ -1,17 +1,37 @@
 {
-  "description": "Remind Claude to use the learning-loop skill: a standing instruction at session start, and a short nudge on prompts that ask why or how something works.",
+  "description": "Remind Claude to use the learning-loop skill: a standing instruction at session start, a short nudge on prompts that ask why or how something works, and a Stop-hook judge that checks the finished change for business-rule, data and contract impact.",
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/learning-loop-nudge.sh\" session", "timeout": 5 }
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/learning-loop-nudge.sh\" session",
+            "timeout": 5
+          }
         ]
       }
     ],
     "UserPromptSubmit": [
       {
         "hooks": [
-          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/learning-loop-nudge.sh\" prompt", "timeout": 5 }
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/learning-loop-nudge.sh\" prompt",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/learning_judge.py\" hook",
+            "timeout": 30,
+            "statusMessage": "Learning judge: checking the change"
+          }
         ]
       }
     ]

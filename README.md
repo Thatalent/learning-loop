@@ -19,9 +19,10 @@ A note on honesty: the learning pyramid is usually shown with retention percenta
 
 | Skill | What it does | When it runs |
 |---|---|---|
-| `learning-loop` | The core engine: sets a Bloom goal, picks activities, adds micro-moments (why-lines, predict-first, diagrams), and tracks a "gap ledger" of things the AI knows that you don't yet | **Ambient** during building, documenting, and exploring. **Opt-in** during triage, with a debrief offer at the end |
+| `learning-loop` | The core engine: finds your competency gap (the Bloom's level your role needs minus the level you can prove), picks activities, adds micro-moments (why-lines, predict-first, diagrams), and tracks a "gap ledger" of things the AI knows that you don't yet | **Ambient** during building, documenting, and exploring. **Opt-in** during triage, with a debrief offer at the end |
 | `check-understanding` | Quizzes, flashcards, scenario questions, and rubric reviews, matched to the Bloom level | "Quiz me", "check my understanding", or after a session |
 | `knowledge-handoff` | Turns what you learned into an explainer, runbook, debrief, or decision record that **you** shape, then publishes it. When many people need to learn the same thing, it builds a self-paced lesson deck instead (with the optional [`frontend-slides`](https://github.com/zarazhangrui/frontend-slides) skill) so the lesson repeats without a teacher | "Document this", "write the postmortem", or end-of-task offers |
+| `lesson-plan` | Builds a **personalized, interactive HTML lesson** for one learner on any topic, technical or not (a system, but also a product, process, client conversation or policy), aimed at their gap: one hands-on activity per Bloom's level, picked to fit the topic (label a diagram, order a process, sort, explore a simulation, estimate, spot the mistake, finish a task, branching scenario), plus a results slide and a revisit plan. Built with [`frontend-slides`](https://github.com/zarazhangrui/frontend-slides) | "Make me a lesson on…", "teach me X properly", or when a team needs a lesson deck |
 
 ### The learning dial
 - **Just do it:** the work, plus a 2-line "what happened and why" at the end. Default for urgent triage.
@@ -40,7 +41,7 @@ Claude picks a skill by matching your message against its description, which isn
 
 #### Optional: teach the judge your repo's real consumers
 
-Out of the box the judge uses generic rules (`scripts/learning-judge.default.json`) that find the *kind* of change but not who consumes it, so it asks Claude to look up the real readers before teaching or drawing. A repo can add `.claude/learning-judge.json` to name them, for example "this config key feeds the nightly sketch job, which feeds audience sizes". Copy the default file as a starting point, replace the `downstream` chains with real ones, and set `"include_default_rules": true` to keep the generic rules as well. No script or hook goes in the repo.
+Out of the box the judge uses generic rules (`scripts/learning-judge.default.json`) that find the *kind* of change but not who consumes it, so it asks Claude to look up the real readers before teaching or drawing. A repo can add `.claude/learning-judge.json` to name them, for example "this config key feeds the nightly rollup job, which feeds the weekly revenue dashboard". Copy the default file as a starting point, replace the `downstream` chains with real ones, and set `"include_default_rules": true` to keep the generic rules as well. No script or hook goes in the repo.
 
 ```bash
 # What would the judge say about a branch? (run from inside the repo)
@@ -52,11 +53,11 @@ To turn all three hooks off and keep the skills, set `LEARNING_LOOP_NUDGES=off` 
 
 ## Install
 
-**Claude (claude.ai / desktop):** download the `.skill` files from Releases and upload each one in Settings → Capabilities → Skills.
+**Claude (claude.ai / desktop):** download the `.skill` files from the [latest release](https://github.com/Thatalent/learning-loop/releases/latest) and upload each one in Settings → Capabilities → Skills.
 
 **Claude Code (plugin marketplace):**
 ```
-/plugin marketplace add <your-github-user>/learning-loop
+/plugin marketplace add Thatalent/learning-loop
 /plugin install learning-loop@learning-loop
 ```
 

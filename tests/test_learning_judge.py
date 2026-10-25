@@ -19,7 +19,7 @@ RULES = {
     "size_thresholds": {"medium": 150, "large": 600},
     "rules": [
         {"id": "window", "kind": "business_rule", "title": "Export window", "paths": ["app/**"],
-         "patterns": ["(?i)lookback"], "downstream": ["export file", "sketch", "audience size"]},
+         "patterns": ["(?i)lookback"], "downstream": ["export file", "rollup", "dashboard total"]},
         {"id": "rows", "kind": "data_impact", "title": "Row shape", "paths": ["app/**"],
          "patterns": ["(?i)starttime"], "downstream": ["export file"]},
         {"id": "api", "kind": "contract", "title": "API field", "paths": ["app/dto/**"],
@@ -55,7 +55,7 @@ class GlobTest(unittest.TestCase):
 
     def test_single_star_stays_in_one_segment(self):
         regex = lj.glob_to_regex("pipelines/*/config/**")
-        self.assertTrue(regex.match("pipelines/cea-refresh/config/steps.json"))
+        self.assertTrue(regex.match("pipelines/nightly-refresh/config/steps.json"))
         self.assertFalse(regex.match("pipelines/a/b/config/steps.json"))
 
 
@@ -85,7 +85,7 @@ class ParseDiffTest(unittest.TestCase):
 
 class SignalsAndVerdictTest(unittest.TestCase):
     def test_business_rule_plus_data_impact_needs_handoff(self):
-        added = [(1, "lookback_days = batch['LookbackDays']"), (2, "payload['starttime'] = refresh_time")]
+        added = [(1, "lookback_days = job['LookbackDays']"), (2, "payload['starttime'] = refresh_time")]
         changes = {"app/export.py": {"added": added, "removed": []}}
         cfg = config()
         signals = lj.find_signals(changes, cfg)
@@ -133,7 +133,7 @@ class SignalsAndVerdictTest(unittest.TestCase):
         self.assertEqual([s["id"] for s in lj.find_signals(changes, config())], ["cfg"])
 
     def test_mermaid_marks_changed_nodes_and_escapes_angle_brackets(self):
-        signals = [{"title": "Window", "kind": "business_rule", "downstream": ["s3 <date>/file", "sketch"]}]
+        signals = [{"title": "Window", "kind": "business_rule", "downstream": ["storage <date>/file", "rollup"]}]
         diagram = lj.build_mermaid(signals)
         self.assertIn("flowchart LR", diagram)
         self.assertIn("#lt;date#gt;", diagram)
@@ -244,7 +244,7 @@ class RunHookTest(unittest.TestCase):
         run("add", ".")
         run("commit", "-q", "-m", "base")
         run("checkout", "-q", "-b", "feature")
-        (self.repo / "app" / "export.py").write_text("LOOKBACK = attribute_lookback\nstarttime = refresh_time\n")
+        (self.repo / "app" / "export.py").write_text("LOOKBACK = event_lookback\nstarttime = refresh_time\n")
         self.transcript = self.repo / "t.jsonl"
         self.transcript.write_text(json.dumps(
             {"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "Edit", "input": {}}]}}) + "\n")

@@ -85,7 +85,7 @@ Then pick the depth:
 
 - **No signal, small change:** the normal end-of-task close.
 - **One kind of signal, or a large change:** run the loop at **Understand**. Ask one predict-first question about what the change does to its nearest consumer, then close.
-- **A business rule plus a data or contract change (or data plus contract):** run the loop at **Analyze**. Trace the chain from the change to the last consumer that people look at (a dashboard, an audience size, a report), and ask one predict-first question about it, such as "what will this number show on day 1 vs day 30?" Then hand off to `knowledge-handoff` with one specific offer: a change explainer built on a before/after diagram of that data flow, with the deploy order and what to watch after release.
+- **A business rule plus a data or contract change (or data plus contract):** run the loop at **Analyze**. Trace the chain from the change to the last consumer that people look at (a dashboard, a customer-facing count, a report), and ask one predict-first question about it, such as "what will this number show on day 1 vs day 30?" Then hand off to `knowledge-handoff` with one specific offer: a change explainer built on a before/after diagram of that data flow, with the deploy order and what to watch after release.
 
 Name the real consumers. Search for the readers of the changed key, column, path or field before you teach or draw; a generic chain ("downstream jobs") teaches nothing. If the repo has `.claude/learning-judge.json`, its rules already list them.
 

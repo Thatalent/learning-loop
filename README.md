@@ -19,9 +19,10 @@ A note on honesty: the learning pyramid is usually shown with retention percenta
 
 | Skill | What it does | When it runs |
 |---|---|---|
-| `learning-loop` | The core engine: sets a Bloom goal, picks activities, adds micro-moments (why-lines, predict-first, diagrams), and tracks a "gap ledger" of things the AI knows that you don't yet | **Ambient** during building, documenting, and exploring. **Opt-in** during triage, with a debrief offer at the end |
+| `learning-loop` | The core engine: finds your competency gap (the Bloom's level your role needs minus the level you can prove), picks activities, adds micro-moments (why-lines, predict-first, diagrams), and tracks a "gap ledger" of things the AI knows that you don't yet | **Ambient** during building, documenting, and exploring. **Opt-in** during triage, with a debrief offer at the end |
 | `check-understanding` | Quizzes, flashcards, scenario questions, and rubric reviews, matched to the Bloom level | "Quiz me", "check my understanding", or after a session |
 | `knowledge-handoff` | Turns what you learned into an explainer, runbook, debrief, or decision record that **you** shape, then publishes it. When many people need to learn the same thing, it builds a self-paced lesson deck instead (with the optional [`frontend-slides`](https://github.com/zarazhangrui/frontend-slides) skill) so the lesson repeats without a teacher | "Document this", "write the postmortem", or end-of-task offers |
+| `lesson-plan` | Builds a **personalized, interactive HTML lesson** for one learner, aimed at their gap: one hands-on activity per Bloom's level, picked to fit the topic (label a diagram, order a process, sort symptoms from causes, explore a simulation, estimate, spot the bug, finish a fix, branching scenario), plus a results slide and a revisit plan. Built with [`frontend-slides`](https://github.com/zarazhangrui/frontend-slides) | "Make me a lesson on…", "teach me X properly", or when a team needs a lesson deck |
 
 ### The learning dial
 - **Just do it:** the work, plus a 2-line "what happened and why" at the end. Default for urgent triage.

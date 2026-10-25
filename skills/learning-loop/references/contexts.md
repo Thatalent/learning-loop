@@ -53,6 +53,17 @@ When the person asks you to explain a change, diff or PR (often one you just mad
 4. Interleave short retrieval checks.
 5. End with them explaining the system back in a few sentences, then offer a doc, or a lesson deck if others will onboard to the same system (`knowledge-handoff` step 1a).
 
+## Non-technical work (sales, success, marketing, operations, people teams)
+
+The same loop applies; only the material changes. Never reach for code, terminal output or system jargon unless the topic is about them.
+
+- **The "system" is whatever they work with:** a product, a process, a client account, a policy, a report, a campaign.
+- **Demonstration** means walking through a real artifact: a client email, a report, a contract clause, a call recording summary.
+- **Practice** means doing the real task with feedback: drafting the reply, ordering the steps, deciding what to prioritize.
+- **Micro-moments** sound like: "Leading with their renewal date, because that's what they asked about" (why-line), or "Before I suggest a reply, what do you think they're really worried about?" (predict-first).
+- **Wrap-up capture** produces a playbook entry, a talk track, an FAQ answer or a checklist rather than a runbook.
+- Define any term the person might not know the first time you use it.
+
 ## Pure Q&A ("how does X work?")
 
 Answer the question well, with a visual if the concept has structure. Then add one line of light-touch learning, such as a quick "check yourself" question, or "the key idea is X; want to try applying it?" Don't turn a simple question into a lesson.

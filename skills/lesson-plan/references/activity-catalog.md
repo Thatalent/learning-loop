@@ -6,24 +6,28 @@ Sources behind these choices: the H5P content-type catalog (the most widely used
 
 ## Quick picker
 
-| What you're teaching | Best-fit activity | Bloom's levels | Kit function |
-|---|---|---|---|
-| The parts of a system, vocabulary, "what is where" | **Label the diagram** (explore hotspots, then find-it quiz) | Remember | `Kit.hotspots` |
-| A procedure, pipeline, lifecycle or timeline | **Put it in order** (Parsons-style sequencing) | Understand, Apply | `Kit.sequence` |
-| Distinctions: symptom vs cause vs fix, which category, which owner | **Sort it** (buckets) | Understand, Analyze | `Kit.sort` |
-| Cause and effect in something that changes (caches, queues, retries, rate limits, timing, scaling) | **Explore the system** (simulation with a goal) | Understand, Analyze | `Kit.simulate` |
-| A misconception you want to surface before teaching | **Predict first** | Understand | `Kit.predict` |
-| Scale and intuition: sizes, rates, costs, latency | **Estimate** (calibration slider) | Understand, Evaluate | `Kit.estimate` |
-| Reading code, configs, queries or logs critically | **Spot the bug** (erroneous example) | Analyze, Evaluate | `Kit.spot` |
-| A skill the learner will perform: a fix, a query, a runbook step | **Finish the fix** (faded worked example) | Apply | `Kit.fade` |
-| Judgment under uncertainty: triage, trade-offs, policy | **Choose your response** (branching scenario) | Apply, Analyze, Evaluate | `Kit.branch` |
-| Recall to lock it in | **Retrieval check** (quiz or flashcards; use the check-understanding skill's question rules) | Remember, Understand | `Kit.predict` with several items, or a quiz slide |
+Lessons are for anyone: engineers learning a system, and equally a salesperson learning a product, a manager learning a process, or a new hire learning how the company works. Every activity works for technical and non-technical topics; the examples show both.
+
+| What you're teaching | Best-fit activity | Technical example | Non-technical example | Levels | Kit function |
+|---|---|---|---|---|---|
+| The parts of something, vocabulary, "what is where" | **Label the diagram** | Parts of a data pipeline | Stages of the customer journey; who owns what on an org chart | Remember | `Kit.hotspots` |
+| A procedure, process, lifecycle or timeline | **Put it in order** | Steps of a deploy | Steps of onboarding a client; a contract's approval path | Understand, Apply | `Kit.sequence` |
+| Distinctions and categories | **Sort it** | Symptom vs cause vs fix | Need vs nice-to-have; which team handles which request; fact vs assumption | Understand, Analyze | `Kit.sort` |
+| Cause and effect in something that changes | **Explore the system** | Cache size vs hit rate | Discount vs margin; budget vs reach; response time vs satisfaction | Understand, Analyze | `Kit.simulate` |
+| A misconception to surface first | **Predict first** | "Why would a filter return zero?" | "What do most clients actually ask about first?" | Understand | `Kit.predict` |
+| Scale and intuition | **Estimate** | Rows after a bad join | Average deal length; how many leads become customers | Understand, Evaluate | `Kit.estimate` |
+| Reading something critically | **Spot the mistake** (`prose: true` for documents) | A bug in a function | The wrong promise in a client email; the gap in a policy; the bad assumption in a plan | Analyze, Evaluate | `Kit.spot` |
+| A skill they'll perform | **Finish the fix** (faded example) | Steps of a fix | Steps of handling a refund request; writing a follow-up email | Apply | `Kit.fade` |
+| Judgment under uncertainty | **Choose your response** (branching) | Incident triage | A difficult client call; prioritizing competing requests; a hiring decision | Apply, Analyze, Evaluate | `Kit.branch` |
+| Recall to lock it in | **Retrieval check** | Key terms and commands | Product facts, policy rules | Remember, Understand | `Kit.predict`, or a quiz slide |
 
 **Create** is not an in-deck activity: end every lesson by asking the learner to produce something (an explainer, a runbook note, teaching a teammate), and point to the knowledge-handoff skill.
 
 ## Choosing well
 
 **Match the learner's experience (the expertise reversal effect).** Worked and faded examples help novices most and can slow down experienced learners. For someone solid through Understand, lead with Predict, Sequence and Finish the fix. For someone solid through Apply, lead with Spot the bug, Explore the system and Choose your response.
+
+**Match the learner's world, not the author's.** For non-technical learners, never use code, terminal output or system jargon unless the topic is about them. Use the documents, conversations and decisions they deal with: emails, proposals, reports, calls, policies, spreadsheets. Define any necessary term on the slide where it first appears.
 
 **One activity per objective, climbing.** A personalized lesson has one objective per Bloom's level from the learner's edge up to what their role needs, and one activity per objective, in level order. Don't put a Remember activity in front of someone who's already solid at Understand.
 
@@ -60,9 +64,9 @@ Sources behind these choices: the H5P content-type catalog (the most widely used
 - Pick a quantity whose true value surprises (a cache hit rate, a queue's backlog after an hour, rows after a bad join).
 - Set a tolerance that rewards the right order of magnitude, not exactness.
 
-### Spot the bug (`Kit.spot`)
-- 4–12 lines of the learner's language or config format; exactly one bug (or two related lines).
-- Frame it as someone else's code. Attributing errors to a fictional author keeps it low-stakes.
+### Spot the mistake (`Kit.spot`)
+- 4–12 lines: code or config for technical lessons; for anything else, set `prose: true` and use sentences from an email, policy, plan, script or report. Exactly one mistake (or two related lines).
+- Frame it as someone else's work. Attributing errors to a fictional author keeps it low-stakes.
 - Hint points to *where to look*, explanation says *why it breaks* and *how to fix it*.
 
 ### Finish the fix (`Kit.fade`)
@@ -79,5 +83,5 @@ Sources behind these choices: the H5P content-type catalog (the most widely used
 - **Parsons problems (sequencing):** studies found learners complete Parsons problems faster than fixing or writing code, with the same learning gains; distractor steps reduced novice success and increased time on task.
 - **Explorable explanations (simulations):** what distinguishes them from plain widgets is that they deliberately guide attention to particular phenomena in the simulation, which is why every simulation here has a goal.
 - **Faded worked examples:** reduce cognitive load for novices; in a workplace training study, gradual fading outperformed both example–problem pairs and pure problem-solving, especially on delayed and transfer tests.
-- **Erroneous examples (spot the bug):** students who found, explained and fixed errors did significantly better on delayed tests than students who solved the same problems, even though they liked the materials less. Expect it to feel harder; that's part of why it works.
+- **Erroneous examples (spot the mistake):** students who found, explained and fixed errors did significantly better on delayed tests than students who solved the same problems, even though they liked the materials less. Expect it to feel harder; that's part of why it works.
 - **Retrieval practice and prediction** (see the learning-loop skill's `learning-ladder.md`): pulling an answer from memory, and guessing before being told, both strengthen retention.

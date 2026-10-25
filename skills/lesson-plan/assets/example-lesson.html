@@ -200,6 +200,10 @@ svg {
 .kit-line code { font: inherit; white-space: pre; }
 .kit-line.is-good, .kit-line.is-wrong { color: var(--kit-ink); }
 .kit-ln { color: #7d8492; min-width: 2ch; text-align: right; }
+.kit-prose { background: var(--kit-surface); border: 2px solid var(--kit-line); }
+.kit-prose .kit-line { color: var(--kit-ink); font: 400 var(--kit-size)/1.45 var(--kit-font); white-space: normal; padding: 8px 12px; }
+.kit-prose .kit-line:hover { background: var(--kit-info-soft); border-color: var(--kit-line); }
+.kit-prose .kit-ln { color: var(--kit-muted); }
 /* branch + predict */
 .kit-branch-text { font-size: calc(var(--kit-size) * 1.05); line-height: 1.5; background: var(--kit-surface); border-left: 6px solid var(--kit-accent); padding: 18px 22px; border-radius: 0 12px 12px 0; }
 .kit-branch-opts { display: flex; flex-direction: column; gap: 10px; }
@@ -510,15 +514,15 @@ const Kit = (() => {
   function spot(el, cfg) {
     const { body, bar, fb } = shell(el, cfg, 'spot');
     const bugs = [].concat(cfg.bug); let revealed = false;
-    const pre = h('div', { class: 'kit-code', role: 'list' });
+    const pre = h('div', { class: cfg.prose ? 'kit-code kit-prose' : 'kit-code', role: 'list' });
     body.appendChild(pre);
     cfg.lines.forEach((ln, i) => {
       const b = button('', 'kit-line'); b.setAttribute('role', 'listitem');
-      b.innerHTML = `<span class="kit-ln">${i + 1}</span><code>${esc(ln) || '&nbsp;'}</code>`;
+      b.innerHTML = cfg.prose ? `<span class="kit-ln">${i + 1}</span><span class="kit-prose-text">${esc(ln) || '&nbsp;'}</span>` : `<span class="kit-ln">${i + 1}</span><code>${esc(ln) || '&nbsp;'}</code>`;
       b.onclick = () => {
         const ok = bugs.includes(i) && !revealed; record(cfg, ok); b.classList.add(bugs.includes(i) ? 'is-good' : 'is-wrong');
         if (revealed) { say(fb, null, '<b>The answer was shown</b>, so this one counts as practice. Come back to it later and try it cold.'); return; }
-        say(fb, ok, ok ? `<b>That's the bug.</b> ${esc(cfg.explain || '')}` : `<b>Line ${i + 1} is fine.</b> ${esc(cfg.hint || 'Look for the line whose effect reaches beyond this function.')}`);
+        say(fb, ok, ok ? `<b>${cfg.prose ? "That's the one." : "That's the bug."}</b> ${esc(cfg.explain || '')}` : `<b>${cfg.prose ? 'Sentence' : 'Line'} ${i + 1} is fine.</b> ${esc(cfg.hint || 'Look for the line whose effect reaches beyond where it is written.')}`);
       };
       pre.appendChild(b);
     });
@@ -633,6 +637,8 @@ const Kit = (() => {
 
   return { sequence, sort, hotspots, simulate, spot, branch, estimate, fade, predict, summary, results, reset, LEVELS };
 })();
+
+
 
 
 </script>

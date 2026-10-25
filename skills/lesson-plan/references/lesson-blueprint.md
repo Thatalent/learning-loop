@@ -4,10 +4,10 @@
 
 Ask only what you can't infer from the conversation, in one message:
 1. **Topic and scope:** what exactly should they learn? ("How our nightly refresh works" beats "data pipelines.")
-2. **What their role needs:** use, debug or be on call, own or review, or teach it. This sets the target Bloom's level (Apply, Analyze, Evaluate, Create).
+2. **What their role needs:** use it day to day (Apply), troubleshoot it or handle problems with it (Analyze), own it, decide about it or review others' work on it (Evaluate), or teach it (Create).
 3. **Where they are now:** if the learning-loop skill already found their edge this session, use it. Otherwise run a quick probe: 2–3 questions climbing from Remember, stopping where it breaks. Never assume a level from job title alone.
 
-Also note: time available (default 15 minutes), their language or stack for code activities, and whether the lesson will be shared (if so, keep internal names, customer data and credentials out).
+Also note: time available (default 15 minutes), whether they're technical (for non-technical learners, use their documents, conversations and decisions, never code or system jargon), their language or stack if it is a code topic, and whether the lesson will be shared (if so, keep internal names, customer data and credentials out).
 
 ## 2. Objectives
 
@@ -40,12 +40,13 @@ Every activity slide shows its Bloom's level in the eyebrow ("Spot the bug · An
 2. **Inline the kit:** paste `assets/lesson-kit.css` into the `<style>` block and `assets/lesson-kit.js` into a `<script>` block. Set the `--kit-*` variables to match the preset's colors and fonts.
 3. **Write content only:** each activity is one `Kit.<type>(element, config)` call with plain data. Don't write new interaction code unless no kit type fits; if you must, follow the same rules (keyboard accessible, feedback with explanation, hint before answer, `record` the result).
 4. **Keyboard safety:** the deck's arrow-key navigation must ignore key presses inside inputs, sliders and selects (see the example).
-5. **Use `assets/example-lesson.html` as the reference** for wiring: it uses every activity type and is known to work.
+5. **Use the examples as references** for wiring. Both are known to work: `assets/example-lesson.html` (a technical topic, every activity type) and `assets/example-lesson-nontechnical.html` (a client renewal conversation, with spot-the-mistake in prose mode and a business simulation).
 
 ## 5. Check before handing over
 
 - Open it (or render it headless) and complete every activity once: no console errors, every activity reaches a "correct" state, and the summary fills in.
 - Check that no slide overflows the stage and that text is readable at projector size.
+- For non-technical learners: read every slide as they would. Any unexplained acronym, tool name or system term is a bug; define it or remove it.
 - Search the file for anything that shouldn't be shared if the lesson will travel (internal hostnames, customer names, tokens).
 
 ## 6. Deliver

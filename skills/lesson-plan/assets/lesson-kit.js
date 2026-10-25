@@ -9,7 +9,7 @@
  *   Kit.sort(el, {id, level, prompt, buckets:[...], items:[{text, bucket}], explain})
  *   Kit.hotspots(el, {id, level, prompt, svg, spots:[{x, y, label, text}], quiz:[{ask, spot}]})
  *   Kit.simulate(el, {id, level, prompt, controls:[...], render(state) -> html, goal:{ask, check(state), success}})
- *   Kit.spot(el, {id, level, prompt, lines:[...], bug, hint, explain, lang})
+ *   Kit.spot(el, {id, level, prompt, lines:[...], bug, hint, explain, prose})   prose:true for emails, policies, plans
  *   Kit.branch(el, {id, level, prompt, start, nodes:{key:{text, choices:[{label, next, feedback, good}]} | {text, end:true, good}}})
  *   Kit.estimate(el, {id, level, prompt, min, max, step, answer, tolerance, unit, explain})
  *   Kit.fade(el, {id, level, prompt, steps:[{text} | {before, after, accept:[...], placeholder}], explain})
@@ -191,15 +191,15 @@ const Kit = (() => {
   function spot(el, cfg) {
     const { body, bar, fb } = shell(el, cfg, 'spot');
     const bugs = [].concat(cfg.bug); let revealed = false;
-    const pre = h('div', { class: 'kit-code', role: 'list' });
+    const pre = h('div', { class: cfg.prose ? 'kit-code kit-prose' : 'kit-code', role: 'list' });
     body.appendChild(pre);
     cfg.lines.forEach((ln, i) => {
       const b = button('', 'kit-line'); b.setAttribute('role', 'listitem');
-      b.innerHTML = `<span class="kit-ln">${i + 1}</span><code>${esc(ln) || '&nbsp;'}</code>`;
+      b.innerHTML = cfg.prose ? `<span class="kit-ln">${i + 1}</span><span class="kit-prose-text">${esc(ln) || '&nbsp;'}</span>` : `<span class="kit-ln">${i + 1}</span><code>${esc(ln) || '&nbsp;'}</code>`;
       b.onclick = () => {
         const ok = bugs.includes(i) && !revealed; record(cfg, ok); b.classList.add(bugs.includes(i) ? 'is-good' : 'is-wrong');
         if (revealed) { say(fb, null, '<b>The answer was shown</b>, so this one counts as practice. Come back to it later and try it cold.'); return; }
-        say(fb, ok, ok ? `<b>That's the bug.</b> ${esc(cfg.explain || '')}` : `<b>Line ${i + 1} is fine.</b> ${esc(cfg.hint || 'Look for the line whose effect reaches beyond this function.')}`);
+        say(fb, ok, ok ? `<b>${cfg.prose ? "That's the one." : "That's the bug."}</b> ${esc(cfg.explain || '')}` : `<b>${cfg.prose ? 'Sentence' : 'Line'} ${i + 1} is fine.</b> ${esc(cfg.hint || 'Look for the line whose effect reaches beyond where it is written.')}`);
       };
       pre.appendChild(b);
     });

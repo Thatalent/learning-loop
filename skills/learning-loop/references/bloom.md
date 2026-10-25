@@ -32,6 +32,17 @@ A goal is a gap: **the level the role needs minus the level the person can prove
 | Evaluate | "Here's a proposed fix. What would you need to know before approving it, and what could it break?" |
 | Create | "Outline the first steps of a runbook a new teammate could follow without asking you." |
 
+**For non-technical topics** (a product, process, client account, policy or report), use the same climb with their material:
+
+| Level | Probe |
+|---|---|
+| Remember | "Without looking: what are the main steps, and who's involved in each?" |
+| Understand | "In two or three sentences, why does it work this way?" |
+| Apply | "Walk me through exactly what you'd do for this real case." |
+| Analyze | "This went wrong last month. What are three possible reasons, and which would you check first?" |
+| Evaluate | "Here's a proposed approach. What would you need to know before agreeing, and what could go wrong?" |
+| Create | "Outline a short guide or checklist a new colleague could follow without asking you." |
+
 Judge answers on whether they demonstrate the level (specific, causal where needed, actionable), not on polish. "Shaky" (partly, or needed to look) counts as the edge.
 
 **The first goal is the first level they couldn't prove**, never a level above it, even if the role needs more. If they're solid through everything the role needs, there's no gap for this system: say so, and offer Create (writing it up for the next person) rather than teaching below their level.

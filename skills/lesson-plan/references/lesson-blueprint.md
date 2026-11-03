@@ -32,7 +32,7 @@ If the edge is already at or above the target, there's no gap: say so, and offer
 | n+2 | **Results** | `Kit.summary`: results by level, the next goal, and a next step per level |
 | n+3 | **Make it stick** | When to revisit (in two days, then a week), what to try without notes, and a Create task (explain it to someone, or write it up with knowledge-handoff) |
 
-**Teach before you test.** Apart from the predict-first slide, every activity must be answerable from what the lesson has already shown, or from what the interview proved the learner knows. The predict-first slide is the only deliberate exception: label it as a guess ("No wrong answers yet"), keep it off the results slide (give it an id containing a colon, such as `guess:predict`; `Kit.summary` skips those), and make sure later slides answer it.
+**Teach before you test.** Apart from the predict-first slide, every activity must be answerable from what the lesson has already shown, or from what the interview proved the learner knows. A slide can teach and test at once when the activity has a teaching phase before its check: `Kit.hotspots` (explore each part, then the find-it quiz) or `Kit.simulate` (a goal plus feedback that names the insight as the learner experiments). Use one of these in place of a separate teaching slide when hands-on exploring teaches better than reading. The predict-first slide is the only deliberate exception: label it as a guess ("No wrong answers yet"), keep it off the results slide (give it an id containing a colon, such as `guess:predict`; `Kit.summary` skips those), and make sure later slides answer it.
 
 For **group lessons a presenter runs** (lunch and learns, onboarding sessions), assume no prior knowledge, and keep the room's answer to a show of hands or a shout-out, with the presenter clicking.
 
@@ -49,7 +49,7 @@ Every activity slide shows its Bloom's level in the eyebrow ("Spot the bug · An
 ## 5. Check before handing over
 
 - Open it (or render it headless) and complete every activity once: no console errors, every activity reaches a "correct" state, and the summary fills in.
-- **Teach-before-test check:** for every activity except predict-first, name the earlier slide (or interview answer) that taught what it needs. An activity that teaches and then tests on the same slide counts: a `Kit.hotspots` big picture teaches the parts in its explore phase before its quiz phase, so name that explore phase. If you can't name either, add teaching before it or cut the activity.
+- **Teach-before-test check:** for every activity except predict-first, name the earlier slide (or interview answer) that taught what it needs. An activity that teaches and then tests on the same slide counts (a hotspots explore phase, a simulation's guided goal); name that phase. If you can't name either, add teaching before it or cut the activity.
 - Check that no slide overflows the stage and that text is readable at projector size.
 - For non-technical learners: read every slide as they would. Any unexplained acronym, tool name or system term is a bug; define it or remove it.
 - Search the file for anything that shouldn't be shared if the lesson will travel (internal hostnames, customer names, tokens).

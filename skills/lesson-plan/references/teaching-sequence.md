@@ -4,12 +4,11 @@ A lesson must work for someone who knows nothing about the topic. Activities tes
 
 Why (research summary): learners grasp new material better when they already know the main terms and parts (Mayer's *pre-training* principle), learn more from words with pictures than words alone (*multimedia*), and from short learner-paced segments (*segmenting*) with the key parts highlighted (*signaling*). In a 2025 randomized trial at Harvard, a structured AI tutor that scaffolded steps and managed cognitive load produced more than twice the learning gains of an active-learning class; a generic chatbot setup does not do this on its own. Worked examples and faded steps help novices most and can slow experts (*expertise reversal*), so the amount of teaching scales with the gap.
 
-## 1. Know where they start (interview only if needed)
+## 1. Know where they start (always interview)
 
-- **If learning-loop already established their level this session, skip the interview.** Reuse the edge and target it found, and say so on the title slide.
-- **Otherwise interview briefly** (one message, then adjust): what they need to be able to do and why; what they already know about it, in their own words; one or two probe questions climbing from the basics, stopping where it breaks; and the words or ideas that confuse them.
-- Listen for **misconceptions**, not just gaps. A wrong idea needs its own "common mistake" step; adding facts on top won't fix it.
-- **Starting from zero is normal.** If they can't answer the first probe, the lesson starts at Remember with a foundations section. Never skip a level to reach the goal faster.
+- **Always interview, in one message, before building.** Ask what they need to be able to do and why; a self-rating where **"No prior knowledge (default)"** is the first, pre-selected option, then "I've heard of it", "I use it", "I troubleshoot it" and "I could teach it"; for anything above the default, one or two probe questions climbing from the basics, stopping where it breaks; and the words or ideas that confuse them. Trust the probe over the self-rating.
+- **If learning-loop already established their level this session,** show it ("Earlier you could explain X but not Y") and ask them to confirm it. Don't silently skip the interview.
+- **No prior knowledge is the default, and it's normal.** Use it when they pick it, skip the probe, miss the first probe question, or the lesson is for a group a presenter will run. The lesson then starts at Remember with a foundations section, defines every term before using it, and introduces one concept at a time. Never skip a level to reach the goal faster.
 
 ## 2. Build a knowledge map before the slides
 

@@ -11,7 +11,7 @@ This skill depends on **frontend-slides** for the deck itself (stage, style, nav
 
 ## Workflow
 
-1. **Find the gap.** The goal is the distance between the Bloom's level the learner's role needs and the level they can prove today. **If learning-loop already established their level this session, skip the questions** and reuse it. Otherwise **interview them first** (what they need to do, what they already know in their own words, a short probe climbing from the basics, and what confuses them), as described in `references/teaching-sequence.md`. Starting from zero is normal: the lesson then begins at the foundations. If there's no gap, say so and suggest a Create task instead of a lesson.
+1. **Always interview first.** Before you write anything, interview the learner as described in `references/lesson-blueprint.md` and `references/teaching-sequence.md`: what they need to do, a self-rating where **"No prior knowledge (default)"** is the first, pre-selected option, a short probe for anything above the default, and what confuses them. If learning-loop already found their level this session, show it and ask them to confirm it rather than skipping the interview. No prior knowledge is the default, and it's normal: the lesson then starts at the foundations and introduces one concept at a time. If there's no gap, say so and suggest a Create task instead of a lesson.
 2. **Map the knowledge.** List the 3–7 ideas the goal depends on, in prerequisite order, and mark which ones they already have. The lesson teaches the missing ones, in order.
 3. **Write objectives.** One per level, from the edge up to the target, each phrased as something they'll be able to do.
 4. **Teach each objective before testing it.** Every objective is a segment: a plain-language explanation of what, why and how; a labeled diagram with the key part highlighted; a worked example; then the activity; then feedback that explains. Scale the teaching to the learner: novices get every step, people near the goal start at the activity. See `references/teaching-sequence.md`.
@@ -22,6 +22,7 @@ This skill depends on **frontend-slides** for the deck itself (stage, style, nav
 
 ## Principles
 
+- **Teach before you test.** Only the predict-first slide asks for a guess, and it says so. Every other activity practices something the lesson already taught.
 - **Teach, then test.** A lesson must work for someone who knows nothing about the topic. Explain and diagram each idea before any activity uses it, add one new idea at a time, and don't climb a level until the one below is solid.
 - **Interaction is the point.** Questions alone are a quiz. Each objective gets an activity that makes the learner manipulate the idea: arrange it, sort it, break it, fix it, decide.
 - **Fit beats variety.** The activity must match what's being taught. A simulation for cause and effect, sequencing for a process, spot-the-mistake for reading code, an email or a policy critically. Never pick a format to tick a box.

@@ -22,7 +22,7 @@ List the 3–7 ideas the goal depends on, in prerequisite order (each one needs 
 | **Teach** | Concept slide | A one-sentence idea in plain words, then 3–6 sentences explaining *what* it is, *why* it works that way, and *how* it connects to what came before. Define every new term where it first appears. |
 | **Show** | Diagram slide | An inline SVG built for this idea: the parts, labeled, with arrows for flow or cause, the key part **highlighted**, and a short caption next to it (not a paragraph below). Build it up step by step if it has more than five parts. |
 | **Example** | Worked example | One concrete, real case walked through step by step, with the reasoning for each step. For novices, add a second example from a different setting. |
-| **Try** | Activity | The kit activity that fits (see `activity-catalog.md`), using only what has been taught so far. |
+| **Try** | Activity + practice set | The kit activity that fits (see `activity-catalog.md`), then a `Kit.practice` set for each KC in the segment, sized to the learner's starting point (see `practice-opportunities.md`). One activity is one opportunity; mastery usually takes several. |
 | **Explain** | Feedback + recap | The activity's explanation says *why* the answer is right and why the tempting wrong one is wrong, then one line connecting it to the next segment. |
 
 Scale it to the learner: **novices get every step** (and a "common mistake" note); learners partway there get Teach + Show briefly, then Try; learners near the goal start at Try and see the explanation only if they miss.

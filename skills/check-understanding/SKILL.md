@@ -36,6 +36,14 @@ See `references/question-design.md` for how to write good distractors, scenarios
 
 **Default mix:** 3–5 questions, starting one level below the target to build confidence and ending at the target. For a quick end-of-task check, 2–3 questions is plenty.
 
+## 3b. Practice to mastery, not one question per level
+
+One question is one opportunity, and mastery typically takes several per knowledge component (about 7; more when starting low). When the goal is mastery rather than a quick check:
+- Group questions by knowledge component and write several **varied** items for each (different numbers, names or contexts; same underlying skill).
+- Score only the **first attempt**; after a miss, explain, then have the person give the correct answer before moving on.
+- Stop a knowledge component after about three first-try successes in a row, and queue the rest for a spaced follow-up.
+- Report progress as opportunities so far and roughly how many to go, never as ability.
+
 ## 4. Deliver
 
 - If an interactive quiz or flashcard tool is available, use it for Remember and Understand multiple-choice questions. Include a hint and a short explanation for each answer, since the explanation is where much of the learning happens.

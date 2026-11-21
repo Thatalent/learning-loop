@@ -48,9 +48,17 @@ These are the main tool for ambient learning. Each costs the person seconds, not
 
 If the person ignores a blocking question and just says "keep going", answer it yourself briefly and move on. That's a signal to turn the dial down.
 
+## Opportunities, not pace
+
+Research across 27 datasets (Koedinger et al., PNAS 2023) found that people differ a lot in what they already know when they start, but are remarkably similar in how much they gain from each practice opportunity with feedback: about 7 opportunities to master a typical knowledge component, more when starting lower. So:
+- Treat every micro-moment (a prediction, an explain-back, a fix they write) as a practice opportunity on a specific knowledge component, and count them in the gap ledger.
+- When someone struggles, give more and varied opportunities with feedback; never a slower pace, lower expectations or a "slow learner" framing.
+- Only the first attempt counts as evidence; a retry after feedback is learning, not proof.
+- When a knowledge component clearly needs many more opportunities than this conversation allows, say so plainly and offer a practice set (check-understanding) or a lesson (lesson-plan) to continue.
+
 ## The gap ledger
 
-While working, keep a private running note of things *you* figured out that the person probably doesn't understand yet: a root cause they didn't follow, a tool output you interpreted, a concept you used without explaining. This is the core problem the skill solves (the AI knowing more than the human about the human's own system), so track it explicitly.
+While working, keep a private running note, per knowledge component, of things *you* figured out that the person probably doesn't understand yet: a root cause they didn't follow, a tool output you interpreted, a concept you used without explaining. This is the core problem the skill solves (the AI knowing more than the human about the human's own system), so track it explicitly.
 
 Use the ledger to:
 - Pick what to explain in the end-of-task recap (the top 1–3 items).

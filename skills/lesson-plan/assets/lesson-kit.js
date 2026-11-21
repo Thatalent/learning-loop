@@ -14,6 +14,11 @@
  *   Kit.estimate(el, {id, level, prompt, min, max, step, answer, tolerance, unit, explain})
  *   Kit.fade(el, {id, level, prompt, steps:[{text} | {before, after, accept:[...], placeholder}], explain})
  *   Kit.predict(el, {id, level, prompt, options:[...], answer, reveal})
+ *   Kit.practice(el, {id, kc, level, label, start, streak, max, items:[{q, options, answer, hint, explain} | {q, accept:[...], hint, explain}]})
+ *       A practice set for ONE knowledge component (KC). Serves varied items until mastery: `streak` first-attempt
+ *       successes in a row (default 3), or `max` items. Only the first attempt counts as performance (a hint or a
+ *       wrong first try counts as an error); after an error the learner sees the explanation and must enter the
+ *       correct answer before moving on. Records opportunities and an estimate of how many more are needed.
  *   Kit.summary(el, {levels:[...], next:{Remember:'…', ...}})
  */
 const Kit = (() => {
@@ -291,6 +296,64 @@ const Kit = (() => {
     });
   }
 
+  /* ---------- Practice set (opportunities to mastery for one knowledge component) ---------- */
+  // Research basis (Koedinger et al., PNAS 2023): learners gain ~0.09 log odds per practice opportunity with
+  // feedback, and differ far more in where they start than in how fast they learn. So we give MORE
+  // opportunities to people who start lower, rather than a slower pace or lower expectations.
+  const RATE = 0.09, logit = p => Math.log(p / (1 - p));
+  function opportunitiesToMastery(p) { return Math.max(0, Math.ceil((logit(0.8) - logit(Math.min(0.97, Math.max(0.03, p)))) / RATE)); }
+  const moreText = n => n > 20 ? '20+ (spread across sessions)' : String(n);
+  function practice(el, cfg) {
+    const { body, bar, fb } = shell(el, cfg, 'practice');
+    const streakGoal = cfg.streak || 3, max = cfg.max || Math.max(cfg.items.length, 8);
+    const prev = results[cfg.id] || {};
+    let opps = prev.opps || 0, firstOk = prev.firstOk || 0, streak = prev.streak || 0, idx = opps % cfg.items.length;
+    let firstAttempt = true, needCorrect = false, lastOk = false; const recent = [];
+    const head = h('div', { class: 'kit-meta' });
+    body.appendChild(head); const area = h('div'); body.appendChild(area);
+    const save = (mastered) => {
+      // Current accuracy estimate: the research learning curve from the starting estimate (start + 0.09 log odds per
+      // opportunity so far), blended with the learner's recent first tries so their own data adjusts the plan.
+      const start = cfg.start != null ? cfg.start : 0.65, pModel = 1 / (1 + Math.exp(-(logit(start) + RATE * opps)));
+      recent.push(lastOk); if (recent.length > 5) recent.shift();
+      const wins = recent.filter(Boolean).length, pHat = (pModel * 5 + wins + 0.5) / (5 + recent.length + 1);
+      results[cfg.id] = { level: cfg.level || 'Apply', label: cfg.label || cfg.kc, kc: cfg.kc, ok: !!mastered, tries: opps,
+        opps, firstOk, streak, more: mastered ? 0 : opportunitiesToMastery(pHat) };
+      try { store && store.setItem(KEY, JSON.stringify(results)); } catch (e) {}
+      listeners.forEach(f => f(results));
+    };
+    const status = () => { const r = results[cfg.id];
+      head.innerHTML = `<b>${esc(cfg.kc)}</b> · practice ${opps} · first-try correct ${firstOk} · streak ${streak}/${streakGoal}` +
+        (r && !r.ok && opps ? ` · about ${moreText(r.more)} more to mastery` : ''); };
+    const done = (why) => { area.innerHTML = ''; bar.innerHTML = '';
+      say(fb, why === 'mastered', why === 'mastered' ? `<b>Mastered for now:</b> ${streakGoal} right on the first try in a row, after ${opps} practice opportunities. Come back in a couple of days to keep it.`
+        : `<b>Good work: ${opps} opportunities so far.</b> This one needs more practice, which is normal: people differ mostly in where they start, not in how fast they learn. It's queued for your next session.`);
+      const again = button('Practice more', 'kit-ghost'); again.onclick = () => { streak = 0; save(false); next(); }; bar.appendChild(again); };
+    const next = () => {
+      status(); if (streak >= streakGoal) return done('mastered'); if (opps >= max && !(results[cfg.id] || {}).ok) return done('more');
+      const it = cfg.items[idx % cfg.items.length]; idx++; firstAttempt = true; needCorrect = false;
+      area.innerHTML = ''; bar.innerHTML = ''; say(fb, null, '');
+      area.appendChild(h('p', { class: 'kit-prompt' }, esc(it.q)));
+      const check = (ok) => {
+        if (firstAttempt) { opps++; lastOk = ok; if (ok) { firstOk++; streak++; } else streak = 0; firstAttempt = false; save(streak >= streakGoal); status(); }
+        if (ok) { say(fb, true, `<b>${needCorrect ? 'Now you have it.' : 'Correct.'}</b> ${esc(it.explain || '')}`);
+          bar.innerHTML = ''; const n = button(streak >= streakGoal ? 'Finish' : 'Next item', 'kit-primary'); n.onclick = next; bar.appendChild(n); n.focus(); }
+        else { needCorrect = true; say(fb, false, `<b>Not yet.</b> ${esc(it.explain || it.hint || '')} <br>Enter the correct answer to continue.`); }
+      };
+      if (it.options) {
+        const opts = h('div', { class: 'kit-branch-opts' }); area.appendChild(opts);
+        it.options.forEach((o, i) => { const b = button(o, 'kit-choice'); b.onclick = () => { b.classList.add(i === it.answer ? 'is-good' : 'is-wrong'); check(i === it.answer); }; opts.appendChild(b); });
+      } else {
+        const inp = h('input', { type: 'text', class: 'kit-fade-input', 'aria-label': 'Your answer', placeholder: 'Type your answer' }); area.appendChild(inp);
+        const go = button('Check', 'kit-primary'); bar.appendChild(go);
+        const submit = () => { const v = inp.value.toLowerCase().trim(); if (!v) return; check(it.accept.some(a => v.includes(a.toLowerCase().trim()))); };
+        go.onclick = submit; inp.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+      }
+      if (it.hint) { const hb = button('Hint', 'kit-ghost'); hb.onclick = () => { if (firstAttempt) { opps++; lastOk = false; streak = 0; firstAttempt = false; save(false); status(); } say(fb, null, `<b>Hint:</b> ${esc(it.hint)} <i>(a hint counts as a practice opportunity, not a first-try success)</i>`); }; bar.appendChild(hb); }
+    };
+    if (prev.ok) { streak = Math.max(streak, streakGoal); status(); done('mastered'); } else next();
+  }
+
   /* ---------- Summary (results by Bloom level, with next steps) ---------- */
   function summary(el, cfg = {}) {
     el.classList.add('kit', 'kit-summary');
@@ -306,11 +369,15 @@ const Kit = (() => {
       el.innerHTML = rows ? `<table class="kit-results"><tr><th>Level</th><th>Your result</th><th>Next step</th></tr>${rows}</table>` +
         `<p class="kit-prompt">${edge ? `Your next goal: <b>${edge}</b>. Revisit the ${edge} activity in two days, without notes.` : 'Everything solved. Teach it: write a one-page explainer for the next person.'}</p>`
         : '<p class="kit-muted">Complete the activities and your results appear here.</p>';
+      const kcs = Object.values(results).filter(r => r.kc);
+      if (kcs.length) el.innerHTML += `<table class="kit-results"><tr><th>Knowledge component</th><th>Practice so far</th><th>Status</th></tr>${kcs.map(r =>
+        `<tr class="${r.ok ? 'is-good' : 'is-info'}"><th>${esc(r.kc)}</th><td>${r.opps} opportunities · ${r.firstOk} right on the first try</td><td>${r.ok ? 'Mastered for now' : `About ${moreText(r.more)} more opportunities`}</td></tr>`).join('')}</table>
+        <p class="kit-muted">Progress is counted in practice opportunities, not ability: most people gain about the same from each one. Starting lower just means more opportunities.</p>`;
     };
     listeners.push(draw); draw();
   }
 
   function reset() { for (const k in results) delete results[k]; try { store && store.removeItem(KEY); } catch (e) {} listeners.forEach(f => f(results)); }
 
-  return { sequence, sort, hotspots, simulate, spot, branch, estimate, fade, predict, summary, results, reset, LEVELS };
+  return { sequence, sort, hotspots, simulate, spot, branch, estimate, fade, predict, practice, summary, results, reset, LEVELS, opportunitiesToMastery };
 })();

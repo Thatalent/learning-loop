@@ -19,6 +19,7 @@ Lessons are for anyone: engineers learning a system, and equally a salesperson l
 | Reading something critically | **Spot the mistake** (`prose: true` for documents) | A bug in a function | The wrong promise in a client email; the gap in a policy; the bad assumption in a plan | Analyze, Evaluate | `Kit.spot` |
 | A skill they'll perform | **Finish the fix** (faded example) | Steps of a fix | Steps of handling a refund request; writing a follow-up email | Apply | `Kit.fade` |
 | Judgment under uncertainty | **Choose your response** (branching) | Incident triage | A difficult client call; prioritizing competing requests; a hiring decision | Apply, Analyze, Evaluate | `Kit.branch` |
+| Repeated practice to mastery on one knowledge component | **Practice set** (varied items, first-try scoring, retry to correct) | Choosing the right collection for 6 different needs | Classifying 6 client objections | Apply (any level) | `Kit.practice` |
 | Recall to lock it in | **Retrieval check** | Key terms and commands | Product facts, policy rules | Remember, Understand | `Kit.predict`, or a quiz slide |
 
 **Create** is not an in-deck activity: end every lesson by asking the learner to produce something (an explainer, a runbook note, teaching a teammate), and point to the knowledge-handoff skill.

@@ -82,3 +82,7 @@
 .kit-results tr.is-good td:nth-child(2) { color: var(--kit-good); font-weight: 700; }
 .kit-results tr.is-bad td:nth-child(2) { color: var(--kit-bad); font-weight: 700; }
 @media (prefers-reduced-motion: reduce) { .kit-hs-dot { animation: none; } .kit-btn { transition: none; } }
+
+/* practice set */
+.kit-meta { font-size: calc(var(--kit-size) * .7); color: var(--kit-muted); }
+.kit-meta b { color: var(--kit-accent); }
